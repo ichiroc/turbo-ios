@@ -323,7 +323,13 @@ extension Session: WKNavigationDelegate {
         let navigationAction: WKNavigationAction
 
         var policy: WKNavigationActionPolicy {
-            navigationAction.navigationType == .linkActivated || isMainFrameNavigation ? .cancel : .allow
+            if navigationAction.navigationType == .linkActivated {
+                return .cancel
+            } else if navigationAction.navigationType != .formSubmitted && isMainFrameNavigation {
+                return .cancel
+            } else {
+                return .allow
+            }
         }
 
         var externallyOpenableURL: URL? {
